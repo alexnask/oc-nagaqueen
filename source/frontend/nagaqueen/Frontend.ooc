@@ -4,7 +4,7 @@ import structs/[Stack, List, HashMap], io/File
 
 import nagaqueen/OocListener
 
-import core/frontend/ParsingPool
+import frontend/[Frontend, ParsingPool]
 
 import ast/[Module, FuncDecl, Call, Statement, Type, Expression,
     Var, Access, StringLit, NumberLit, Import, Node, Return]
@@ -31,9 +31,11 @@ VarStack: class {
  */ 
 AstBuilder: class extends OocListener {
 
+    module: Module
+    pool: ParsingPool
     stack := Stack<Object> new()
     
-    do: func (module: Module, path: String) {
+    doParse: func (=module, path: String, =pool) {
         stack push(module)
         parse(path)
     }
@@ -294,7 +296,7 @@ nagaqueen_Frontend: class extends Frontend {
     parse: func (path: String) {
         try {
             module = Module new(path substring(0, -5))
-            builder do(module, path)
+            builder doParse(module, path, pool)
         } catch (e: Exception) {
             e print()
         }
