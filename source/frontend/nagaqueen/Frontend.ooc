@@ -7,10 +7,8 @@ import nagaqueen/OocListener
 import frontend/[Frontend, ParsingPool]
 
 import ast/[Module, FuncDecl, Call, Statement, Type, Expression,
-    Var, Access, StringLit, NumberLit, Import, Node, Return]
+    Var, Access, StringLit, NumberLit, Import, Node, Return, CoverDecl]
 import middle/Resolver
-
-"Nagaqueen frontend fully loaded!" println()
 
 /**
  * Used to parse multi-vars declarations, ie.
@@ -183,6 +181,16 @@ AstBuilder: class extends OocListener {
         peek(VarStack) vars each(|v|
             v _type = type
         )
+    }
+
+    /* Covers */
+
+    onCoverStart: func (name: String, doc: String) {
+	stack push(CoverDecl new())
+    }
+
+    onCoverEnd: func -> Object {
+	pop(CoverDecl)
     }
 
     /* Types */
