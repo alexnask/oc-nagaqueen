@@ -185,7 +185,7 @@ AstBuilder: class extends OocListener {
 
     /* Covers */
 
-    onCoverStart: func (name: String, doc: String) {
+    onCoverStart: func (name, doc: CString) {
 	stack push(CoverDecl new())
     }
 
