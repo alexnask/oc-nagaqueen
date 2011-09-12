@@ -25,7 +25,9 @@ VarStack: class {
 /**
  * This class uses nagaqueen callbacks to create an oc AST from a .ooc file.
  * 
- * Since nagaqueen is rock's parser
+ * Since nagaqueen is rock's parser, it means that with oc-nagaqueen, oc can parse
+ * the same things at rock - at least on the surface. Some parts of the syntax
+ * may be unimplemented and/or behave differently. In that case, a compiler error is thrown.
  */ 
 AstBuilder: class extends OocListener {
 
@@ -41,18 +43,28 @@ AstBuilder: class extends OocListener {
     /*
      * Stack handling functions
      */
+
+    /**
+     * Removes the head of the stack and return it
+     */
     pop: func <T> (T: Class) -> T {
         v := stack pop()
         if(!v instanceOf?(T)) Exception new("Expected " + T name + ", pop'd " + v class name) throw()
         v
     }
 
+    /**
+     * Returns the head of the stack without removing it
+     */
     peek: func <T> (T: Class) -> T {
         v := stack peek()
         if(!v instanceOf?(T)) Exception new("Expected " + T name + ", peek'd " + v class name) throw()
         v
     }
 
+    /**
+     * Return a String representation of the current state of the stack
+     */
     stackString: func -> String {
         b := Buffer new()
         stack each(|el|
